@@ -1,12 +1,5 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
 }
 
 datasource db {
@@ -14,17 +7,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum BookStatus {
-  AVAILABLE
-  BORROWED
-}
-
 model Book {
-  id            String      @id @default(uuid()) @db.Uuid
-  title         String      @db.VarChar(255)
-  author        String      @db.VarChar(255)
-  publishedYear Int         @db.Integer
-  status        BookStatus  @default(AVAILABLE)
+  id            String     @id @default(uuid()) @db.Uuid
+  title         String     @db.VarChar(255)
+  author        String     @db.VarChar(255)
+  publishedYear Int
+  status        BookStatus @default(AVAILABLE)
   loans         Loan[]
 
   @@index([status])
@@ -32,24 +20,28 @@ model Book {
 }
 
 model User {
-  id    String   @id @default(uuid()) @db.Uuid
-  name  String   @db.VarChar(255)
-  email String   @unique @db.VarChar(255)
+  id    String @id @default(uuid()) @db.Uuid
+  name  String @db.VarChar(255)
+  email String @unique @db.VarChar(255)
   loans Loan[]
 }
 
 model Loan {
-  id         String     @id @default(uuid()) @db.Uuid
-  bookId     String     @db.Uuid
-  userId     String     @db.Uuid
-  loanDate   DateTime   @default(now()) @db.Timestamptz
-  returnDate DateTime?  @db.Timestamptz
+  id         String    @id @default(uuid()) @db.Uuid
+  bookId     String    @db.Uuid
+  userId     String    @db.Uuid
+  loanDate   DateTime  @default(now()) @db.Timestamptz(6)
+  returnDate DateTime? @db.Timestamptz(6)
+  book       Book      @relation(fields: [bookId], references: [id])
+  user       User      @relation(fields: [userId], references: [id])
 
-  book Book @relation(fields: [bookId], references: [id])
-  user User @relation(fields: [userId], references: [id])
-
+  @@unique([bookId, userId, loanDate])
   @@index([bookId])
   @@index([userId])
   @@index([loanDate])
-  @@unique([bookId, userId, loanDate])
+}
+
+enum BookStatus {
+  AVAILABLE
+  BORROWED
 }

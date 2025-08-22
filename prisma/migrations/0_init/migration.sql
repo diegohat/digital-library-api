@@ -1,3 +1,6 @@
+-- CreateSchema
+CREATE SCHEMA IF NOT EXISTS "public";
+
 -- CreateEnum
 CREATE TYPE "public"."BookStatus" AS ENUM ('AVAILABLE', 'BORROWED');
 
@@ -26,8 +29,8 @@ CREATE TABLE "public"."Loan" (
     "id" UUID NOT NULL,
     "bookId" UUID NOT NULL,
     "userId" UUID NOT NULL,
-    "loanDate" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "returnDate" TIMESTAMPTZ,
+    "loanDate" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "returnDate" TIMESTAMPTZ(6),
 
     CONSTRAINT "Loan_pkey" PRIMARY KEY ("id")
 );
@@ -58,3 +61,4 @@ ALTER TABLE "public"."Loan" ADD CONSTRAINT "Loan_bookId_fkey" FOREIGN KEY ("book
 
 -- AddForeignKey
 ALTER TABLE "public"."Loan" ADD CONSTRAINT "Loan_userId_fkey" FOREIGN KEY ("userId") REFERENCES "public"."User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
