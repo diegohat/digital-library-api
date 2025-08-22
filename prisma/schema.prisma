@@ -23,7 +23,7 @@ model Book {
   id            String      @id @default(uuid()) @db.Uuid
   title         String      @db.VarChar(255)
   author        String      @db.VarChar(255)
-  publishedYear Int         @db.Int4
+  publishedYear Int         @db.Integer
   status        BookStatus  @default(AVAILABLE)
   loans         Loan[]
 
@@ -52,3 +52,4 @@ model Loan {
   @@index([userId])
   @@index([loanDate])
   @@unique([bookId, userId, loanDate])
+}
