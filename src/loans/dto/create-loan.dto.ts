@@ -1,6 +1,6 @@
-import { IsUUID } from 'class-validator';
+import { IsUUID, IsNotEmpty } from 'class-validator';
 
 export class CreateLoanDto {
-  @IsUUID() bookId: string;
-  @IsUUID() userId: string;
+  @IsUUID() @IsNotEmpty() bookId: string;
+  @IsUUID() @IsNotEmpty() userId: string;
 }

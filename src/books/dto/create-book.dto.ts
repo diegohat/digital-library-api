@@ -1,9 +1,9 @@
-import { IsEnum, IsInt, IsString, MaxLength, Min } from 'class-validator';
+import { IsEnum, IsInt, IsString, MaxLength, Min, IsOptional, IsNotEmpty, IsPositive } from 'class-validator';
 import { BookStatus } from '@prisma/client';
 
 export class CreateBookDto {
-  @IsString() @MaxLength(255) title: string;
-  @IsString() @MaxLength(255) author: string;
-  @IsInt() @Min(0) publishedYear: number;
-  @IsEnum(BookStatus) status?: BookStatus;
+  @IsString() @MaxLength(255) @IsNotEmpty() title: string;
+  @IsString() @MaxLength(255) @IsNotEmpty() author: string;
+  @IsInt() @IsPositive() @IsNotEmpty() publishedYear: number;
+  @IsOptional() @IsEnum(BookStatus) status?: BookStatus;
 }
