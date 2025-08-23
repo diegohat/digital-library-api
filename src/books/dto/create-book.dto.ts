@@ -1,4 +1,13 @@
-import { IsEnum, IsInt, IsString, MaxLength, Min, IsOptional, IsNotEmpty, IsPositive } from 'class-validator';
+import {
+  IsEnum,
+  IsInt,
+  IsString,
+  MaxLength,
+  Min,
+  IsOptional,
+  IsNotEmpty,
+  IsPositive,
+} from 'class-validator';
 import { BookStatus } from '@prisma/client';
 
 export class CreateBookDto {
