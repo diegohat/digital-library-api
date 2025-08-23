@@ -1,6 +1,9 @@
 import { IsEnum } from 'class-validator';
 import { BookStatus } from '@prisma/client';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateBookStatusDto {
-  @IsEnum(BookStatus) status: BookStatus;
+  @ApiProperty({ example: BookStatus.AVAILABLE, description: 'book status', enum: BookStatus })
+  @IsEnum(BookStatus)
+  status: BookStatus;
 }

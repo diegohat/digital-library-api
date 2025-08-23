@@ -2,25 +2,27 @@
 
 > API para gerenciamento de livros, usuários e empréstimos, construída com **NestJS**, **Prisma** e **PostgreSQL**.
 
-![NestJS](https://nestjs.com/img/logo-small.svg)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)  
+![Node.js](https://img.shields.io/badge/Node.js-%3E%3D18-green)  
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-%3E%3D14-blue)  
+[![Swagger Docs](https://img.shields.io/badge/Swagger-UI-brightgreen)](#-documentação-com-swagger)
 
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
-![Node.js](https://img.shields.io/badge/Node.js-%3E%3D18-green)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-%3E%3D14-blue)
+![NestJS](https://nestjs.com/img/logo-small.svg)
 
 ---
 
 ## 📖 Sumário
-- [Sobre o projeto](#sobre-o-projeto)
-- [Tecnologias](#tecnologias)
-- [Pré-requisitos](#pré-requisitos)
-- [Instalação](#instalação)
-- [Configuração do Banco de Dados](#configuração-do-banco-de-dados)
-- [Uso rápido](#uso-rápido)
-- [Endpoints principais](#endpoints-principais)
-- [Testes](#testes)
-- [Contribuição](#contribuição)
-- [Licença](#licença)
+- [Sobre o projeto](#-sobre-o-projeto)
+- [Tecnologias](#-tecnologias)
+- [Pré-requisitos](#-pré-requisitos)
+- [Instalação](#-instalação)
+- [Configuração do Banco de Dados](#-configuração-do-banco-de-dados)
+- [Uso rápido](#-uso-rápido)
+- [Documentação com Swagger](#-documentação-com-swagger)
+- [Endpoints principais](#-endpoints-principais)
+- [Testes](#-testes)
+- [Contribuição](#-contribuição)
+- [Licença](#-licença)
 
 ---
 
@@ -40,6 +42,7 @@ A **Digital Library API** é uma solução para controle de bibliotecas, permiti
 - [Jest](https://jestjs.io/) (Testes)
 - [Winston](https://github.com/winstonjs/winston) (Logger)
 - [Class-validator](https://github.com/typestack/class-validator) (Validação)
+- [Swagger](https://swagger.io/) (Documentação interativa)
 
 ---
 
@@ -103,6 +106,54 @@ curl -X POST http://localhost:3000/books \
 
 ---
 
+## 📑 Documentação com Swagger
+
+[![Abrir Swagger UI](https://img.shields.io/badge/Abrir%20Swagger%20UI-Localhost%203000-brightgreen)](http://localhost:3000/api)
+
+A API possui documentação interativa via **Swagger** para facilitar o uso e teste dos endpoints.
+
+📍 Acesse após iniciar o projeto:  
+```
+http://localhost:3000/api
+```
+
+📍 Especificação em JSON:  
+```
+http://localhost:3000/api-json
+```
+
+### Configuração no `main.ts`
+```ts
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+
+const config = new DocumentBuilder()
+  .setTitle('Digital Library API')
+  .setDescription('API para gerenciamento de livros, usuários e empréstimos')
+  .setVersion('1.0')
+  .addTag('books')
+  .addTag('users')
+  .addTag('loans')
+  .build();
+
+const document = SwaggerModule.createDocument(app, config);
+SwaggerModule.setup('api', app, document);
+```
+
+### Anotações nos Endpoints
+Uso de decorators como `@ApiTags`, `@ApiOperation` e `@ApiResponse` para descrever as rotas:
+
+```ts
+@ApiTags('books')
+@Post()
+@ApiOperation({ summary: 'Create a new book' })
+@ApiResponse({ status: 201, description: 'The book has been successfully created.' })
+async create(@Body() dto: CreateBookDto) {
+  return await this.booksService.create(dto);
+}
+```
+
+---
+
 ## 📌 Endpoints principais
 
 | Método | Rota                     | Descrição                           | Parâmetros/Corpo |
@@ -125,7 +176,6 @@ yarn test
 # Gera relatório de cobertura
 yarn test:cov
 ```
-
 ---
 
 ## 📄 Licença
